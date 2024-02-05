@@ -2,7 +2,7 @@
 This script demonstrates a basic server-client interaction using the socket module.
 It sets up a server that listens for incoming connections and spawns a new thread to handle each client.
 The server receives messages from clients, prints them, and responds with a confirmation message.
-Start 'server.py' in PyCharm, then open Anaconda prompt and start 'client.py' with 'python client.py'.
+Start 'socket_server.py' in PyCharm, then open Anaconda prompt and start client with 'python socket_client.py'.
 """
 
 import socket
