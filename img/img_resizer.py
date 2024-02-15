@@ -1,5 +1,5 @@
 """
-Resizes images to a specified SIZE (images will be overwritten!)
+Resizes images to specified width W and height H (images will be overwritten!)
 The files need to be located in the 'Downloads' directory
 """
 
@@ -7,8 +7,9 @@ from PIL import Image
 import os
 import sys
 
-SIZE = 1000
-SQUARED = True
+W = 1000
+H = 1500
+# H = 1000
 
 PATH = os.path.join(os.environ['USERPROFILE'], 'Downloads')  # files go here
 
@@ -23,13 +24,10 @@ class Images:
         for file in files:
             im = Image.open(os.path.join(PATH, file))
             w, h = im.size
-            if w == h == SIZE:
+            if w == W and h == H:
                 continue
             print('\033[93m' + file + ' \033[94m' + 'was found')
-            if SQUARED:
-                im = im.resize((SIZE, SIZE))
-            else:
-                im = im.resize((int(w / h * SIZE), SIZE))
+            im = im.resize((W, H))
             im.save(os.path.join(PATH, file), optimize=True)
         print('\033[36m' + 'All images resized!')
 
