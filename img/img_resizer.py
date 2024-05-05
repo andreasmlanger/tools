@@ -8,8 +8,8 @@ import os
 import sys
 
 W = 1000
-H = 1500
-# H = 1000
+# H = 1500
+H = 1000
 
 PATH = os.path.join(os.environ['USERPROFILE'], 'Downloads')  # files go here
 
