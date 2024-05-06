@@ -59,7 +59,7 @@ def df_to_gpx(df, directory='', file_name='NEW'):
     tree.write(file_path, encoding='utf-8', xml_declaration=True)
 
 
-def add_elevation_to_df(df, file='', show_profile=False):
+def add_elevation_to_df(df, file='', show_profile=False, smoothing=False):
     elevation_dict = {'Error': ''}  # only contains 'Error' placeholder
 
     while True:
@@ -77,7 +77,7 @@ def add_elevation_to_df(df, file='', show_profile=False):
         else:
             break
 
-    df = smooth_elevation_profile(df, file, show_profile)
+    df = smooth_elevation_profile(df, file, show_profile, smoothing)
     return df
 
 
@@ -126,11 +126,12 @@ def fetch_elevation(lat, lon):
             print(ex)
 
 
-def smooth_elevation_profile(df, file, show_profile):
+def smooth_elevation_profile(df, file, show_profile, smoothing):
     if show_profile:
         df = add_distance_to_df(df)
         plt.plot(df['distance'], df['elevation'], color='black', alpha=0.2)
-    df['elevation'] = df['elevation'].rolling(N, center=True, min_periods=1).mean()
+    if smoothing:
+        df['elevation'] = df['elevation'].rolling(N, center=True, min_periods=1).mean()
     if show_profile:
         plt.plot(df['distance'], df['elevation'])
         plt.xlabel('Distance (km)')

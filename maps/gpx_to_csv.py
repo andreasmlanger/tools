@@ -10,13 +10,14 @@ from utils import add_distance_to_df, add_elevation_to_df, calculate_elevation_g
 PATH = os.environ['USERPROFILE'] + '\\Downloads\\'  # files go here
 ADD_ELEVATION = True
 SHOW_PROFILE = True  # display elevation profile after each addition of elevation data
+SMOOTHING = True
 
 
 class GPX:
     @staticmethod
     def add_elevation_to_gpx_file(file):
         df = gpx_to_df(file, directory=PATH)
-        df = add_elevation_to_df(df, file=file, show_profile=SHOW_PROFILE)
+        df = add_elevation_to_df(df, file=file, show_profile=SHOW_PROFILE, smoothing=SMOOTHING)
         df_to_gpx(df, directory=PATH, file_name=file[:-4])  # overwrite!
 
     @staticmethod
