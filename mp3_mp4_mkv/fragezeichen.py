@@ -17,6 +17,8 @@ PATH = os.environ['USERPROFILE'] + '\\Downloads\\DDF\\'  # mp3 files go here
 FFMPEG = os.environ['USERPROFILE'] + '\\Miniconda3\\envs\\PyCharm\\Scripts\\ffmpeg.exe'  # location of ffmpeg.exe
 COVERS = 'G:\\My Drive\\Coding\\render\\fragezeichen\\main\\static\\main\\cover\\'
 
+FORBIDDEN_CHARS = {'ä': 'ae', 'ö': 'oe', 'ü': 'ue', 'Ä': 'Ae', 'Ö': 'Oe', 'Ü': 'Ue', 'ß': 'ss'}
+
 
 class DDF:
 
@@ -33,7 +35,7 @@ class DDF:
                     print('\033[94m' + 'Extracting ID3 tags')
                     try:
                         tags = ID3(PATH + file)
-                        album = str(tags['TALB'])
+                        album = str(tags['TALB']).replace('DDF', '').strip()
                     except ID3NoHeaderError:
                         tags = None
                         number, trunk = '', ''
@@ -74,12 +76,15 @@ class DDF:
 
     @staticmethod
     def rename_forbidden_characters():
-        files = [file for file in os.listdir(PATH) if file.endswith('.mp3')]
-        for file in files:
-            if "'" in file:
-                DDF.rename(PATH + file, PATH + file.replace("'", ''))
-            if 'ä' in file or 'ö' in file or 'ü' in file:
-                DDF.rename(PATH + file, PATH + file.replace('ä', 'ae').replace('ö', 'oe').replace('ü', 'ue'))
+        files = [f for f in os.listdir(PATH) if f.endswith('.mp3')]
+        for file_name in files:
+            if "'" in file_name:
+                DDF.rename(PATH + file_name, PATH + file_name.replace("'", ''))
+            if any(char in file_name for char in FORBIDDEN_CHARS.keys()):
+                new_name = PATH + file_name
+                for k, v in FORBIDDEN_CHARS.items():
+                    new_name = new_name.replace(k, v)
+                DDF.rename(PATH + file_name, new_name)
 
     @staticmethod
     def join_chapters(number):
